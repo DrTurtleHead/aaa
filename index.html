@@ -134,8 +134,9 @@
         card1.style.outlineColor = 'green'; // 配對成功時外框變綠色
         card2.style.outlineColor = 'green'; // 配對成功時外框變綠色
 
+        const cardId = card1.dataset.id;
         setTimeout(() => {
-            infoFile = `msg/w${card.id}.txt`; // 文件路徑
+            infoFile = `msg/w${cardId}.txt`; // 文件路徑
             fetch(infoFile)
               .then(response => response.text())
               .then(text => {
