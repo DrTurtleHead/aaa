@@ -135,7 +135,7 @@
         card2.style.outlineColor = 'green'; // 配對成功時外框變綠色
 
         setTimeout(() => {
-            infoFile = 'msg/test.txt'; // 文件路徑
+            infoFile = `msg/w${card1.dataset.id}.txt`; // 文件路徑
             fetch(infoFile)
               .then(response => response.text())
               .then(text => {
