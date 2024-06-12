@@ -1,6 +1,4 @@
-/* styles.css */
 body {
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,61 +7,52 @@ body {
     margin: 0;
 }
 
-.game-container {
-    text-align: center;
-}
-
-.game-board {
+#game-board {
     display: grid;
-    grid-template-columns: repeat(4, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 10px;
-    margin: 20px auto;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 10px;
+    max-width: 90vw;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .card {
-    width: 100px;
-    height: 100px;
-    background-color: #009688;
-    border-radius: 10px;
+    width: 100%;
+    padding-top: 100%; /* Maintain a square aspect ratio */
+    position: relative;
+    background-color: #ccc;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    color: white;
     cursor: pointer;
-    position: relative;
+    transition: background-color 0.3s;
 }
 
-.card.flip .card-front {
-    transform: rotateY(180deg);
+.card.flipped, .card.matched {
+    background-color: #fff;
 }
 
-.card.flip .card-back {
-    transform: rotateY(0);
-}
-
-.card-front, .card-back {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    backface-visibility: hidden;
+.card-content {
     position: absolute;
     top: 0;
+    bottom: 0;
     left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.card-front {
-    background-color: #009688;
-    color: white;
-    transform: rotateY(0);
+@media (max-width: 600px) {
+    .card {
+        font-size: 18px;
+    }
 }
 
-.card-back {
-    background-color: white;
-    color: black;
-    transform: rotateY(-180deg);
+@media (max-width: 400px) {
+    .card {
+        font-size: 14px;
+    }
 }
