@@ -1,15 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flip Card Game</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡片配對遊戲</title>
+<style>
+  /* 基本樣式 */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .game-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 900px;
+  }
+
+  .card {
+    width: 100%;
+    height: 150px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden; /* 新增這行以隱藏卡片背面 */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 新增這行以添加背景色變化的過渡效果 */
+  }
+
+  .card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .card img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+  }
+
+  .card.flipped {
+    background-color: #ccc; /* 點擊後背景變灰色 */
+    outline: 4px solid gray; /* 點擊時外框變粗且顏色為灰色 */
+  }
+
+  .card.matched {
+    pointer-events: none; /* 已匹配的卡片不可點擊 */
+    opacity: 0.5;
+    outline-color: green; /* 配對成功時外框變綠色 */
+  }
+
+  .card.wrong {
+    outline: 4px solid red; /* 配對失敗時外框變紅色 */
+  }
+</style>
 </head>
 <body>
-    <div id="game-board">
-        <!-- Cards will be generated here -->
-    </div>
-    <script src="script.js"></script>
+<div class="game-container" id="game-container"></div>
+
+<script>
+  // 卡片資料
+  const cardsData = [
+    { id: 1, type: 'image', value: 'images/p0.jpg' },
+    { id: 1, type: 'text', value: 'images/t0.jpg' },
+    { id: 2, type: 'image', value: 'images/p1.jpg' },
+    { id: 2, type: 'text', value: 'images/t1.jpg' },
+    { id: 3, type: 'image', value: 'images/p2.jpg' },
+    { id: 3, type: 'text', value: 'images/t2.jpg' },
+    { id: 4, type: 'image', value: 'images/p3.jpg' },
+    { id: 4, type: 'text', value: 'images/t3.jpg' },
+    { id: 5, type: 'image', value: 'images/p4.jpg' },
+    { id: 5, type: 'text', value: 'images/t4.jpg' },
+    { id: 6, type: 'image', value: 'images/p5.jpg' },
+    { id: 6, type: 'text', value: 'images/t5.jpg' },
+    { id: 7, type: 'image', value: 'images/p6.jpg' },
+    { id: 7, type: 'text', value: 'images/t6.jpg' },
+    { id: 8, type: 'image', value: 'images/p7.jpg' },
+    { id: 8, type: 'text', value: 'images/t7.jpg' },
+    { id: 9, type: 'image', value: 'images/p8.jpg' },
+    { id: 9, type: 'text', value: 'images/t8.jpg' },
+  ];
+
+  // 洗牌函數
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // 初始化遊戲
+  function initGame() {
+    const gameContainer = document.getElementById('game-container');
+    const shuffledCards = shuffle([...cardsData]); // 兩套卡片
+
+    shuffledCards.forEach(card => {
+      const cardElement = document.createElement('div');
+      cardElement.classList.add('card');
+      cardElement.dataset.id = card.id;
+      cardElement.dataset.type = card.type;
+      cardElement.dataset.value = card.value;
+      cardElement.innerHTML = `<div class="card-content"><img src="${card.value}" alt=""></div>`;
+      cardElement.addEventListener('click', handleCardClick);
+      gameContainer.appendChild(cardElement);
+    });
+  }
+
+  let selectedCards = [];
+  let matchedPairs = 0;
+
+  // 處理點擊事件
+  function handleCardClick() {
+    if (selectedCards.length === 2 || this.classList.contains('matched') || this.classList.contains('flipped')) return;
+
+    this.classList.toggle('flipped');
+    selectedCards.push(this);
+
+    if (selectedCards.length === 2) {
+      const [card1, card2] = selectedCards;
+      if (card1.dataset.id === card2.dataset.id && card1.dataset.type !== card2.dataset.type) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        card1.style.outlineColor = 'green'; // 配對成功時外框變綠色
+        card2.style.outlineColor = 'green'; // 配對成功時外框變綠色
+
+        setTimeout(() => {
+            infoFile = 'msg/test.txt'; // 文件路徑
+            fetch(infoFile)
+              .then(response => response.text())
+              .then(text => {
+                alert(text); // 顯示文件內容
+              })
+              .catch(error => {
+                console.error('Error fetching info file:', error);
+              });
+          }, 100);
+
+      } else {
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+          card1.classList.add('wrong'); // 配對失敗時外框變紅色
+          card2.classList.add('wrong'); // 配對失敗時外框變紅色
+          setTimeout(() => {
+            card1.classList.remove('wrong'); // 重置卡片外框顏色
+            card2.classList.remove('wrong'); // 重置卡片外框顏色
+          }, 500);
+        }, 0);
+      }
+      selectedCards = [];
+    }
+  }
+
+  // 遊戲初始化
+  initGame();
+</script>
 </body>
 </html>
