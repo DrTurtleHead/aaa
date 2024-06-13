@@ -140,7 +140,8 @@
             fetch(infoFile)
               .then(response => response.text())
               .then(text => {
-                alert(text); // 顯示文件內容
+                const multiLineText = text.split("\n").join("\n");
+                alert(multiLineText); // 顯示文件內容
               })
               .catch(error => {
                 console.error('Error fetching info file:', error);
