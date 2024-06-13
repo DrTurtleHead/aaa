@@ -61,10 +61,27 @@
   .card.wrong {
     outline: 4px solid red; /* 配對失敗時外框變紅色 */
   }
+
+  .restart-btn {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+  font-size: 16px;
+  display: none; /* 初始隐藏 */
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+  
 </style>
 </head>
 <body>
 <div class="game-container" id="game-container"></div>
+<button class="restart-btn" id="restart-btn">再來一次</button>
 
 <script>
   // 卡片資料
@@ -118,6 +135,7 @@
 
   let selectedCards = [];
   let matchedPairs = 0;
+  document.getElementById('restart-btn').style.display = 'none'; // 隐藏重来按钮
 
   // 處理點擊事件
   function handleCardClick() {
@@ -133,6 +151,10 @@
         card2.classList.add('matched');
         card1.style.outlineColor = 'green'; // 配對成功時外框變綠色
         card2.style.outlineColor = 'green'; // 配對成功時外框變綠色
+        matchedPairs++;
+        if (matchedPairs === cardsData.length / 2) {
+          document.getElementById('restart-btn').style.display = 'block'; // 显示重来按钮
+        }
 
         const cardId = card1.dataset.id;
         setTimeout(() => {
@@ -163,6 +185,8 @@
     }
   }
 
+  document.getElementById('restart-btn').addEventListener('click', () => location.reload());
+  
   // 遊戲初始化
   initGame();
 </script>
